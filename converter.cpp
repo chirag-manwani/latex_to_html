@@ -9,6 +9,7 @@ using namespace std;
 
 int section_no = 0;
 int subsection_no = 0;
+int fig_no = 0;
 
 string myString(int n){
     stringstream ss;
@@ -16,10 +17,10 @@ string myString(int n){
     return ss.str();
 }
 
-string headTitle = "<head>\n<style>\ntable {\n\tborder-collapse: collapse;\n}\ntable, th, td {\n\tborder: 1px solid black;\n}\n</style>\n<title>Latex to HTML</title>\n</head>";
+string headTitle = "<head>\n<style> figcaption {text-align: center;font-weight: bold}\nimg {\ndisplay: block;margin-left: auto;margin-right: auto;}\ntable {\n\tborder-collapse: collapse;\n}\ntable, th, td {\n\tborder: 1px solid black;\n}\n</style>\n<title>Latex to HTML</title>\n</head>";
 
 converter :: converter(){
-    myMapping[0] = "h1";
+    myMapping[0] = "h2";
     myMapping[1] = "h3";
     myMapping[2] = "ul";
     myMapping[3] = "ol";
@@ -61,7 +62,7 @@ string converter :: traverseSubSection(ast_node * root, int type){
     string s = "";
     s+="<"+getMapping(type)+">";
     s+=myString(section_no)+"."+myString(subsection_no)+" "+root->data;
-    s+="</"+getMapping(type)+"/>";
+    s+="</"+getMapping(type)+">";
     s+=traverseChildren(root);
     return s;
 }
@@ -103,8 +104,17 @@ string converter :: traverseTable(ast_node * root, int type){
 string converter :: traverseImage(ast_node * root, int type){
     string s = "";
     if(type == 13){
-        s+="<"+ getMapping(type)+" src = "+"\""+root->data+"\" alt = \"Image Here\" "+root->attributes+">";
+        s+="<"+ getMapping(type)+" src = "+"\""+root->data+"\" alt = \"Image Here\" "+root->attributes+ ">";
         s+=traverseChildren(root);
+        fig_no++;
+    }
+    else if(type == 14){
+        string s = "";
+        s+="<"+getMapping(type)+">";
+        s+= "Figure-" + myString(fig_no) + ": ";
+        s+=traverseChildren(root);
+        s+="</"+getMapping(type)+">";
+        return s;
     }
     else{
         s+=traverseDefault(root,type);

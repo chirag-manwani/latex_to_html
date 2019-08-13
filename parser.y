@@ -351,6 +351,9 @@ RESTRICTED_CONTENT:
 		| RESTRICTED_CONTENT RESTRICTED_UNDERLINE	{
 														r_content_children->push_back($2);
 													}
+		| RESTRICTED_CONTENT FIGURE					{
+														r_content_children->push_back($2);
+													}
 		|
 		;
 
@@ -382,7 +385,7 @@ RESTRICTED_UNDERLINE:
 		;
 
 FIGURE:
-		BEGIN_FIGURE FIG_CONTENT END_FIGURE
+		BEGIN_FIGURE BEGIN_SQUARE FIG_ARGS END_SQUARE FIG_CONTENT END_FIGURE
 		{
 			$$ = new_node();
 			$$->node_type = FIGURE_H;
@@ -395,6 +398,10 @@ FIG_CONTENT:
 										figure_children->push_back($2);
 									}
 		| FIG_CONTENT CAP
+									{
+										figure_children->push_back($2);
+									}
+		| FIG_CONTENT LABEL
 									{
 										figure_children->push_back($2);
 									}

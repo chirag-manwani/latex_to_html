@@ -47,7 +47,7 @@ SPECIAL [\.,\^\-=+#!\(\)?\<\>\*:;@\']
                                         return END_ENUMERATE;
                                     }
 
-"\\begin{document}"                 {   
+"\\begin{document}"                 {
                                         return BEGIN_DOCUMENT;
                                     }
 
@@ -100,7 +100,7 @@ SPECIAL [\.,\^\-=+#!\(\)?\<\>\*:;@\']
 "\\begin{tabular}"                  {
     									/*cout<<"Begin tabular\n";*/
                                         BEGIN(TABLE_ARGUMENTS);
-                                        prev_state = -1;
+                                        //prev_state = -1;
                                         return BEGIN_TABULAR;
                                     }
 
@@ -140,7 +140,7 @@ SPECIAL [\.,\^\-=+#!\(\)?\<\>\*:;@\']
 									   return AMPERSAND;
 								    }
 
-<INITIAL,ENV_TABULAR>\\\\			{
+<INITIAL,ENV_TABULAR>\\\\			{   cout<<prev_state;
                                     	return DSLASH;
                                     }
 
@@ -157,23 +157,33 @@ SPECIAL [\.,\^\-=+#!\(\)?\<\>\*:;@\']
 "\\begin{figure}"                   {
                                         /*cout << "begin figure" << endl;*/
                                         BEGIN(ENV_FIGURE);
-                                        prev_state = 2;
+                                        prev_state = 0;
+                                        return BEGIN_FIGURE;
+                                    }
+<ENV_TABULAR>"\\begin{figure}"                   {
+                                        cout << "begin figure" << endl;
+                                        BEGIN(ENV_FIGURE);
+                                        prev_state = 1;
                                         return BEGIN_FIGURE;
                                     }
 
-<ENV_FIGURE>"\\end{figure}"         {
-                                        BEGIN(INITIAL);
-                                        prev_state = 4;
+<ENV_FIGURE>"\\end{figure}"         {cout << "begin figure" << prev_state<<endl;
+                                        switch(prev_state)
+                                        {
+                                            case 0: BEGIN(INITIAL); prev_state = 2; break;
+                                            case 1: BEGIN(ENV_TABULAR); prev_state = 2; cout<<"here"; break;
+                                            case 2: BEGIN(ENV_FIGURE); prev_state = 2; break;
+                                            default: cout << "Error, You shouldn't have entered ENV_FIGURE from here!!" << endl; BEGIN(INITIAL);
+                                        }
                                         return END_FIGURE;
                                     }
-
 <INITIAL,ENV_FIGURE>"\\includegraphics" {
                                         return INCLUDE_GRAPHICS;
                                     }
 
 <INITIAL,ENV_FIGURE>"["             {
                                         BEGIN(FIGURE_ARGUMENTS);
-                                        prev_state = -1;
+                                        //prev_state = 2;
                                         return BEGIN_SQUARE;
                                     }
 <INITIAL,ENV_FIGURE>"{"             {
@@ -186,6 +196,9 @@ SPECIAL [\.,\^\-=+#!\(\)?\<\>\*:;@\']
 
 <ENV_FIGURE>"\\caption"             {
                                         return CAPTION;
+                                    }
+<ENV_FIGURE>"\\label"               {
+                                        return LABEL_TAG;
                                     }
 
 <FIGURE_ARGUMENTS>[a-z=. 0-9,]+       {
@@ -204,13 +217,13 @@ SPECIAL [\.,\^\-=+#!\(\)?\<\>\*:;@\']
                                         }
                                         fin[k] = 0;
                                         yylval.sval = fin;
-                                        
+
                                         return FIG_ARGS;
                                     }
 
 <FIGURE_ARGUMENTS>"]"               {
                                         BEGIN(ENV_FIGURE);
-                                        prev_state = 2;
+                                        //prev_state = 3;
                                         return END_SQUARE;
                                     }
 

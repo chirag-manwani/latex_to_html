@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <cstdlib>
+#include <cstdio>
 #include "ast.h"
 #include "converter.h"
 
@@ -46,6 +48,7 @@ int main(int argc, char *argv[]) {
 		yyparse();
 	} while (!feof(yyin));
 	converter C;
+	print(root, 1);
 	string s = C.traversal(root);
 	C.printHTML(s);
 }

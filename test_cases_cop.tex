@@ -1,0 +1,63 @@
+\documentclass[sigconf]{acmart}
+\usepackage{balance}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{tabularx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{graphics}
+
+
+\begin{document}
+
+\section{Introduction:}
+\par I am a student of Computer Science and Engineering department at \textbf{IIT Delhi}. I am pursuing my \underline{MTech} course.My stay at \textit{IIT Delhi} has been pretty enthralling and engrossing till date.
+
+\subsection{The courses I have taken in the first year are as follows:}
+\begin{enumerate}
+	\item Advanced Data Structures
+	\item Functional Programming
+	\item Software Systems Lab
+	\item Artificial Intelligence
+	\item Special Topics in AI
+	\item Machine Learning
+	\item Topics in Multimedia
+	\item Minor project
+\end{enumerate}
+
+\subsection{Our Building} \label{introduction}
+This the view of the main building of IIT Delhi.
+
+\begin{figure}[h]
+\includegraphics[width=250,height=250]{iitd.jpg}
+\caption{This image will be referenced below}
+\label{fig:IITD Building}
+\end{figure}
+
+You can reference images, for instance, the image \ref{fig:IITD Building} shows
+the image of \textit{IIT Delhi Building}
+
+\section{Testing Tabular environment:}
+
+\begin{tabular}{ |c|c|c| }
+ \hline
+ cell1 & cell2 & cell3 \\
+ \hline
+ cell4 & cell5 & cell6 \\
+ \hline
+ cell7 & cell8 & \begin{figure}[h]
+	\includegraphics[width=250,height=250]{iitd.jpg}
+	\end{figure}
+	 \\
+ \hline
+\end{tabular}
+
+\section{Testing Math Symbols:}
+\subsection{Frac} $x=(a+b)/2$
+\subsection{sqrt} $x=\frac{b}{-4ac}$
+\subsection{sqrt} $y=\sqrt{(a+b)}$
+
+\end{document}
